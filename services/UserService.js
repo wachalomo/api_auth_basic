@@ -1,7 +1,6 @@
 import db from '../dist/db/models/index.js';
 
 const createUser = async (req) => {
-    console.log(db.User);
     const {
         name,
         email,
@@ -39,6 +38,18 @@ const createUser = async (req) => {
     }
 };
 
+const getUserById = async (id) => {
+    return {
+        code: 200,
+        message: await db.User.findOne({
+            where: {
+                id: id
+            }
+        })
+    };
+}
+
 export default {
     createUser,
+    getUserById,
 }
