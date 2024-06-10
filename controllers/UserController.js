@@ -2,12 +2,13 @@ import { Router } from 'express';
 import UserService from '../services/UserService.js';
 import NumberMiddleware from '../middlewares/number.middleware.js';
 import UserMiddleware from '../middlewares/user.middleware.js';
+import AuthMiddleware from '../middlewares/auth.middleware.js';
 
 const router = Router();
 
 router.post('/create', async (req, res) => {
     const response = await UserService.createUser(req);
-    res.code(response.code).message(response.message);
+    res.status(response.code).json(response.message);
 });
 
 router.get(
@@ -15,26 +16,35 @@ router.get(
     [
         NumberMiddleware.isNumber,
         UserMiddleware.isValidUserById,
+        AuthMiddleware.validateToken,
         UserMiddleware.hasPermissions
     ],
     async (req, res) => {
         const response = await UserService.getUserById(req.params.id);
-        res.send(response.message);
+        res.status(response.code).json(response.message);
     });
 
-router.put('/:id',
-    NumberMiddleware.isNumber,
-    UserMiddleware.isValidUserById,
-    UserMiddleware.hasPermissions, (req, res) => {
-        // TODO: Implement this
+router.put('/:id', [
+        NumberMiddleware.isNumber,
+        UserMiddleware.isValidUserById,
+        AuthMiddleware.validateToken,
+        UserMiddleware.hasPermissions,
+    ],
+    async(req, res) => {
+        const response = await UserService.updateUser(req);
+        res.status(response.code).json(response.message);
     });
 
 router.delete('/:id',
-    NumberMiddleware.isNumber,
-    UserMiddleware.isValidUserById,
-    UserMiddleware.hasPermissions,
-    (req, res) => {
-    // TODO: Implement this
+    [
+        NumberMiddleware.isNumber,
+        UserMiddleware.isValidUserById,
+        AuthMiddleware.validateToken,
+        UserMiddleware.hasPermissions,
+    ],
+    async (req, res) => {
+       const response = await UserService.deleteUser(req.params.id);
+       res.status(response.code).json(response.message);
     });
 
 export default router;

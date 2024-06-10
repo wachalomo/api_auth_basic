@@ -4,7 +4,8 @@ const isValidUserById = async (req, res, next) => {
     const id = req.params.id;
     const response = db.User.findOne({
         where: {
-            id: id
+            id: id,
+            status: true,
         }
     });
     if (!response) {
@@ -17,30 +18,9 @@ const isValidUserById = async (req, res, next) => {
 
 const hasPermissions = async (req, res, next) => {
     const token = req.headers.token;
-    if(!token){
-        return res.status(401).json({
-            message: 'Token is required'
-        });
-    }
-    const session = await db.Session.findOne({
-        where: {
-            token: token
-        }
-    });
-    if(!session){
-        return res.status(401).json({
-            message: 'Wrong Token'
-        });
-    }
-    /* if(session.expiration < new Date()){
-        return res.status(401).json({
-            message: 'Expired Token'
-        });
-    }*/
-
     const payload = JSON.parse(Buffer.from(token, 'base64').toString('ascii'));
     if(!payload.roles.includes('admin')){
-        if(payload.id !== req.params.id){
+        if(payload.id !== +req.params.id){
             return res.status(401).json({
                 message: 'Unauthorized'
             });

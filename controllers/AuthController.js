@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import AuthService from '../services/AuthService.js';
+import UserService from '../services/UserService.js';
 import AuthMiddleware from '../middlewares/auth.middleware.js';
 
 const router = Router();
@@ -9,11 +10,14 @@ router.post('/login', AuthMiddleware.validateUserAndPass, async (req, res) => {
     res.status(response.code).json(response.message);
 });
 
-router.post('/register', (req, res) => {
-    // TODO: Implement this
+router.post('/register', async (req, res) => {
+    const response = await UserService.createUser(req);
+    res.status(response.code).json(response.message);
 });
 
-router.post('/logout', (req, res) => {
-    // TODO: Implement this
+router.post('/logout', AuthMiddleware.validateToken, async (req, res) => {
+    const response = await AuthService.logout(req.headers.token);
+    res.status(response.code).json(response.message);
 });
+
 export default router;

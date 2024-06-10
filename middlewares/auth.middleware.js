@@ -1,3 +1,4 @@
+import db from "../dist/db/models/index.js";
 
 const validateUserAndPass = (req, res, next) => {
     if (!req.body.email || !req.body.password) {
@@ -6,6 +7,29 @@ const validateUserAndPass = (req, res, next) => {
     next();
 }
 
+const validateToken = async (req, res, next) => {
+    if (!req.headers.token) {
+        return res.status(401).json({ message: 'No Token' });
+    }
+    const session = await db.Session.findOne({
+        where: {
+            token: req.headers.token
+        }
+    });
+    if(!session){
+        return res.status(401).json({
+            message: 'Wrong Token'
+        });
+    }
+    if(new Date(session.expiration) < new Date()){
+        return res.status(401).json({
+            message: 'Expired Token'
+        });
+    }
+    next();
+}
+
 export default {
-    validateUserAndPass
+    validateUserAndPass,
+    validateToken
 }
