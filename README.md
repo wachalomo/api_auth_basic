@@ -14,15 +14,14 @@
 query params en findUsers: status, name, logAfter, logBefore
 
 formato bulkCreate:
-
-[ 
+```[ 
     {
         "name": "John Doe",
         "email": "johnssssssndoe@example.com",
         "password": "passwsord123",
         "password_second": "passwsord123",
         "cellphone": "123-456-7890"
-    }
+    },
     {
         "name": "John Doe",
         "email": "johnssssssndoe@example.com",
@@ -31,3 +30,4 @@ formato bulkCreate:
         "cellphone": "123-456-7890"
     }
 ]
+```
