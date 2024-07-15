@@ -14,6 +14,7 @@
 query params en findUsers: status, name, logAfter, logBefore
 
 formato bulkCreate:
+
 ```
 [ 
     {
@@ -22,7 +23,6 @@ formato bulkCreate:
         "password": "passwsord123",
         "password_second": "passwsord123",
         "cellphone": "123-456-7890"
-
     },
     {
         "name": "John Doe",
@@ -33,6 +33,4 @@ formato bulkCreate:
     }
 ]
 ```
-
-
 
