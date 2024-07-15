@@ -14,7 +14,8 @@
 query params en findUsers: status, name, logAfter, logBefore
 
 formato bulkCreate:
-```[ 
+```
+[ 
     {
         "name": "John Doe",
         "email": "johnssssssndoe@example.com",
