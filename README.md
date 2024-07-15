@@ -14,7 +14,6 @@
 query params en findUsers: status, name, logAfter, logBefore
 
 formato bulkCreate:
-
 ```
 [ 
     {
